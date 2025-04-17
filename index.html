@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programme de Perte de Poids sur 30 Jours</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --background-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --accent-color: #FF5722;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            flex: 1;
+        }
+        
+        .intro {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .intro h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .day-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: none;
+        }
+        
+        .day-card.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .day-nav {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            position: sticky;
+            top: 0;
+            background-color: var(--background-color);
+            padding: 1rem 0;
+            z-index: 1000;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .day-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .day-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+        
+        .day-btn.active {
+            background-color: var(--accent-color);
+            transform: scale(1.1);
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .meal {
+            margin-bottom: 1.5rem;
+            padding: 1.2rem;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .meal:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .meal h4 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .meal ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .meal li {
+            margin-bottom: 0.3rem;
+        }
+        
+        .motivation-quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background-color: rgba(255, 87, 34, 0.1);
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .motivation-quote::before {
+            content: '"';
+            font-size: 3rem;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            color: var(--accent-color);
+            opacity: 0.3;
+        }
+        
+        .tip-box {
+            background-color: rgba(25, 118, 210, 0.1);
+            border-left: 4px solid #1976D2;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        
+        .exercise {
+            margin: 1.5rem 0;
+            padding: 1.2rem;
+            background-color: rgba(0, 150, 136, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #009688;
+        }
+        
+        .ai-suggestion {
+            background-color: rgba(156, 39, 176, 0.1);
+            border-left: 4px solid #9C27B0;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        
+        .shopping-list {
+            padding: 1.2rem;
+            background-color: rgba(255, 193, 7, 0.1);
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #FFC107;
+        }
+        
+        .shopping-list ul {
+            padding-left: 1.5rem;
+        }
+        
+        .shopping-list li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .toggle-theme {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        .toggle-theme:hover {
+            transform: rotate(30deg);
+        }
+        
+        .dark-theme {
+            --primary-color: #66BB6A;
+            --secondary-color: #43A047;
+            --background-color: #121212;
+            --card-bg: #1E1E1E;
+            --text-color: #E0E0E0;
+        }
+        
+        .water-tracker {
+            margin: 1.5rem 0;
+            padding: 1.2rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .water-glasses {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .water-glass {
+            width: 30px;
+            height: 40px;
+            background-color: #E3F2FD;
+            border: 1px solid #2196F3;
+            border-radius: 0 0 15px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .water-glass:hover {
+            transform: translateY(-3px);
+        }
+        
+        .water-glass.filled {
+            background-color: #2196F3;
+        }
+        
+        .progress-tracker {
+            margin: 1.5rem 0;
+            padding: 1.2rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 90%;
+            width: 500px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: modalAppear 0.5s ease;
+        }
+        
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .close-modal {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .close-modal:hover {
+            background-color: #E64A19;
+            transform: translateY(-3px);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .day-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .day-title h2 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Responsive Styles */
+        @media screen and (max-width: 768px) {
+            .day-nav {
+                padding: 0.5rem;
+                overflow-x: auto;
+                justify-content: flex-start;
+                mask-image: linear-gradient(to right, transparent, black 10px, black 90%, transparent);
+                -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black 90%, transparent);
+                scrollbar-width: none;
+            }
+            
+            .day-nav::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .day-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+                flex-shrink: 0;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .intro {
+                padding: 1rem;
+            }
+            
+            .intro h2 {
+                font-size: 1.3rem;
+            }
+            
+            .day-card {
+                padding: 1rem;
+            }
+            
+            .motivation-quote {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+            
+            .toggle-theme {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+            }
+            
+            .meal, .tip-box, .exercise, .ai-suggestion, .shopping-list {
+                padding: 1rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .day-nav, .toggle-theme, .success-modal, .water-tracker, .progress-tracker {
+                display: none !important;
+            }
+            
+            .day-card {
+                display: block !important;
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin: 1rem 0;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            header {
+                background: none;
+                color: black;
+                box-shadow: none;
+                border-bottom: 2px solid var(--primary-color);
+            }
+            
+            footer {
+                background: none;
+                color: black;
+                border-top: 2px solid var(--primary-color);
+            }
+            
+            body {
+                background-color: white;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-theme" id="themeToggle">🌙</button>
+    
+    <header>
+        <h1>Programme de Perte de Poids sur 30 Jours</h1>
+        <p>Votre guide personnalisé pour une perte de poids saine et durable</p>
+    </header>
+    
+    <div class="container">
+        <div class="intro">
+            <h2>Bienvenue dans votre voyage vers une vie plus saine!</h2>
+            <p>Ce programme de 30 jours a été conçu pour vous aider à atteindre vos objectifs de perte de poids avec des recettes simples, des exercices efficaces et des conseils pratiques. Rappelez-vous que la constance est la clé du succès!</p>
+        </div>
+        
+        <div class="water-tracker">
+            <h3>Suivi d'hydratation quotidien</h3>
+            <p>Objectif: 8 verres d'eau par jour</p>
+            <div class="water-glasses" id="waterTracker">
+                <div class="water-glass" data-index="1"></div>
+                <div class="water-glass" data-index="2"></div>
+                <div class="water-glass" data-index="3"></div>
+                <div class="water-glass" data-index="4"></div>
+                <div class="water-glass" data-index="5"></div>
+                <div class="water-glass" data-index="6"></div>
+                <div class="water-glass" data-index="7"></div>
+                <div class="water-glass" data-index="8"></div>
+            </div>
+        </div>
+        
+        <div class="progress-tracker">
+            <h3>Votre progression</h3>
+            <p>Jour: <span id="currentDay">1</span>/30</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div class="day-nav" id="dayNav">
+            <!-- Day buttons will be generated by JavaScript -->
+        </div>
+        
+        <div id="dayCards">
+            <!-- Day cards will be generated by JavaScript -->
+        </div>
+    </div>
+    
+    <div class="success-modal" id="successModal">
+        <div class="modal-content">
+            <h2>🎉 Félicitations! 🎉</h2>
+            <p>Vous avez complété le programme de 30 jours avec succès!</p>
+            <p>Votre engagement et votre persévérance ont porté leurs fruits.</p>
+            <p>N'oubliez pas que maintenir un mode de vie sain est un marathon, pas un sprint. Continuez à appliquer les habitudes que vous avez développées!</p>
+            <button class="close-modal" id="closeModal">Fermer</button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 Programme de Perte de Poids sur 30 Jours</p>
+        <p>Ce programme est conçu à titre informatif uniquement et ne remplace pas les conseils d'un professionnel de santé.</p>
+    </footer>
+    
+    <script>
+        // Programme de perte de poids sur 30 jours
+        const programData = [
+            {
+                day: 1,
+                meals: {
+                    breakfast: {
+                        title: "Smoothie protéiné aux fruits",
+                        ingredients: ["1 banane", "Une poignée de fraises", "1 yaourt grec", "1 cuillère à soupe de graines de chia", "Un peu d'eau ou de lait d'amande"],
+                        preparation: "Mélangez tous les ingrédients dans un blender jusqu'à obtenir une consistance lisse."
+                    },
+                    lunch: {
+                        title: "Salade de poulet et avocat",
+                        ingredients: ["Blanc de poulet grillé (100g)", "1/2 avocat", "Laitue romaine", "Tomates cerises", "1 cuillère à soupe d'huile d'olive", "Jus de citron"],
+                        preparation: "Coupez le poulet et l'avocat en dés, mélangez avec la laitue et les tomates. Assaisonnez avec l'huile d'olive et le jus de citron."
+                    },
+                    dinner: {
+                        title: "Papillote de saumon aux légumes",
+                        ingredients: ["Filet de saumon (120g)", "Courgette en rondelles", "Poivron rouge en lamelles", "1 cuillère à café d'huile d'olive", "Herbes de Provence"],
+                        preparation: "Placez le saumon et les légumes sur une feuille de papier cuisson, arrosez d'huile d'olive, saupoudrez d'herbes. Fermez la papillote et cuisez au four à 180°C pendant 15-20 minutes."
+                    },
+                    snack: {
+                        title: "Pomme et amandes",
+                        ingredients: ["1 pomme", "10 amandes non salées"],
+                        preparation: "Mangez la pomme avec les amandes comme collation équilibrée."
+                    }
+                },
+                quote: "Le premier pas est le plus difficile, mais vous l'avez déjà fait! Soyez fier de commencer ce voyage vers une meilleure santé.",
+                antiSnackingTip: "Buvez un grand verre d'eau avant chaque repas et lorsque vous ressentez une envie de grignoter. Souvent, la sensation de faim peut être confondue avec la soif.",
+                exercise: {
+                    title: "Marche active",
+                    description: "30 minutes de marche à un rythme soutenu. Trouvez un parcours agréable près de chez vous et profitez de l'air frais!"
+                },
+                aiSuggestion: "Utilisez l'application de suivi alimentaire 'NutriScan' pour analyser rapidement les valeurs nutritionnelles des aliments en les photographiant. La réalité augmentée 2025 vous permet de voir instantanément les calories et les macronutriments."
+            },
+            {
+                day: 2,
+                meals: {
+                    breakfast: {
+                        title: "Omelette aux épinards",
+                        ingredients: ["2 œufs", "Une poignée d'épinards frais", "1 cuillère à café d'huile d'olive", "Sel et poivre"],
+                        preparation: "Battez les œufs, ajoutez les épinards hachés. Cuisez dans une poêle avec un peu d'huile d'olive."
+                    },
+                    lunch: {
+                        title: "Wrap de thon au concombre",
+                        ingredients: ["1 tortilla de blé complet", "Thon au naturel (100g)", "1/2 concombre en tranches", "Quelques feuilles de laitue", "1 cuillère à soupe de yaourt grec"],
+                        preparation: "Égouttez le thon et mélangez-le avec le yaourt. Étalez sur la tortilla, ajoutez le concombre et la laitue, puis roulez."
+                    },
+                    dinner: {
+                        title: "Poulet aux herbes et quinoa",
+                        ingredients: ["Blanc de poulet (120g)", "1/2 tasse de quinoa", "Courgette", "Tomate", "Herbes fraîches", "1 cuillère à café d'huile d'olive"],
+                        preparation: "Cuisez le quinoa selon les instructions. Faites griller le poulet avec les herbes et l'huile. Servez avec le quinoa et les légumes coupés en dés."
+                    },
+                    snack: {
+                        title: "Yaourt grec et myrtilles",
+                        ingredients: ["1 yaourt grec nature", "Une poignée de myrtilles"],
+                        preparation: "Ajoutez simplement les myrtilles au yaourt."
+                    }
+                },
+                quote: "Ne sous-estimez jamais l'importance des petits changements. Ils s'accumulent et créent de grands résultats!",
+                antiSnackingTip: "Gardez des légumes coupés (concombre, carottes, céleri) dans votre réfrigérateur. Quand l'envie de grignoter survient, prenez-en quelques morceaux.",
+                exercise: {
+                    title: "Séance de renforcement musculaire",
+                    description: "15 minutes d'exercices simples: 10 squats, 10 pompes contre le mur, 30 secondes de gainage. Répétez 3 fois avec 1 minute de repos entre chaque série."
+                },
+                aiSuggestion: "Les assistants culinaires IA de 2025 peuvent désormais suggérer des substitutions d'ingrédients en temps réel pendant que vous cuisinez. Activez cette fonction sur votre assistant vocal pour des alternatives plus saines adaptées à votre régime."
+            },
+            {
+                day: 3,
+                meals: {
+                    breakfast: {
+                        title: "Porridge à la cannelle et pomme",
+                        ingredients: ["40g de flocons d'avoine", "200ml de lait d'amande", "1/2 pomme en dés", "1/2 cuillère à café de cannelle", "1 cuillère à café de miel (facultatif)"],
+                        preparation: "Cuisez les flocons d'avoine avec le lait d'amande à feu doux. Ajoutez la pomme, la cannelle et le miel si désiré."
+                    },
+                    lunch: {
+                        title: "Buddha bowl aux légumes et pois chiches",
+                        ingredients: ["1/2 boîte de pois chiches", "1/4 d'avocat", "Carottes râpées", "Chou rouge émincé", "Concombre en tranches", "1 cuillère à soupe d'huile d'olive", "Jus de citron"],
+                        preparation: "Disposez tous les ingrédients dans un bol. Assaisonnez avec l'huile d'olive et le jus de citron."
+                    },
+                    dinner: {
+                        title: "Dinde grillée et légumes rôtis",
+                        ingredients: ["Escalope de dinde (120g)", "Brocoli", "Patate douce", "1 cuillère à café d'huile d'olive", "Herbes de Provence"],
+                        preparation: "Faites griller la dinde. Coupez les légumes, arrosez-les d'huile d'olive et d'herbes, et rôtissez-les au four à 180°C pendant 25 minutes."
+                    },
+                    snack: {
+                        title: "Smoothie vert",
+                        ingredients: ["1 poignée d'épinards", "1/2 banane", "1 kiwi", "200ml d'eau"],
+                        preparation: "Mixez tous les ingrédients jusqu'à obtenir une consistance lisse."
+                    }
+                },
+                quote: "La discipline est de choisir entre ce que vous voulez maintenant et ce que vous voulez le plus.",
+                antiSnackingTip: "Utilisez des assiettes plus petites pour vos repas. Cela crée l'illusion d'une portion plus grande et peut vous aider à vous sentir plus satisfait avec moins de nourriture.",
+                exercise: {
+                    title: "Yoga doux",
+                    description: "20 minutes de yoga doux axé sur la respiration et l'étirement. Recherchez 'yoga débutant' sur une application de fitness pour trouver une séance guidée."
+                },
+                aiSuggestion: "Les miroirs intelligents 2025 peuvent maintenant analyser votre composition corporelle grâce à la technologie de balayage 3D. Cela vous permet de suivre avec précision la perte de graisse et le gain musculaire plutôt que de simplement surveiller le poids."
+            },
+            {
+                day: 4,
+                meals: {
+                    breakfast: {
+                        title: "Toast à l'avocat et œuf poché",
+                        ingredients: ["1 tranche de pain complet", "1/4 d'avocat", "1 œuf", "Sel et poivre", "Quelques feuilles d'épinards"],
+                        preparation: "Faites griller le pain, écrasez l'avocat dessus. Pochez l'œuf et placez-le sur l'avocat avec les épinards."
+                    },
+                    lunch: {
+                        title: "Salade de lentilles et légumes",
+                        ingredients: ["1/2 tasse de lentilles cuites", "Tomate en dés", "Concombre en dés", "Oignon rouge émincé", "Persil frais", "1 cuillère à soupe d'huile d'olive", "Jus de citron"],
+                        preparation: "Mélangez tous les ingrédients dans un bol. Assaisonnez avec l'huile d'olive, le jus de citron, sel et poivre."
+                    },
+                    dinner: {
+                        title: "Cabillaud au four et ratatouille",
+                        ingredients: ["Filet de cabillaud (120g)", "Aubergine", "Courgette", "Poivron", "Tomate", "1 cuillère à café d'huile d'olive", "Herbes de Provence"],
+                        preparation: "Coupez les légumes en dés, arrosez d'huile d'olive et d'herbes, et cuisez-les 20 minutes au four à 180°C. Ajoutez le cabillaud sur le dessus et poursuivez la cuisson 15 minutes."
+                    },
+                    snack: {
+                        title: "Fromage blanc et fruits rouges",
+                        ingredients: ["100g de fromage blanc 0%", "Une poignée de fruits rouges"],
+                        preparation: "Mélangez simplement les fruits avec le fromage blanc."
+                    }
+                },
+                quote: "La santé n'est pas un objectif à atteindre mais un mode de vie à adopter. Chaque jour est une nouvelle opportunité.",
+                antiSnackingTip: "Brossez-vous les dents après les repas. Cela envoie un signal à votre cerveau que le temps de manger est terminé et peut réduire l'envie de grignoter.",
+                exercise: {
+                    title: "Entraînement par intervalles",
+                    description: "20 minutes d'intervalles: alternez 30 secondes de course/marche rapide avec 90 secondes de marche normale. Répétez 8 fois."
+                },
+                aiSuggestion: "Les nouveaux appareils de biofeedback 2025 se connectent à votre smartphone pour mesurer les niveaux de stress en temps réel. Utilisez cette technologie pour identifier quand vous mangez émotionnellement et recevez des suggestions de techniques de relaxation alternatives."
+            },
+            {
+                day: 5,
+                meals: {
+                    breakfast: {
+                        title: "Bol de fruits et yaourt",
+                        ingredients: ["1 yaourt grec", "1/2 banane en tranches", "1 kiwi en dés", "1 cuillère à soupe de graines de lin moulues", "1 cuillère à café de miel (facultatif)"],
+                        preparation: "Disposez le yaourt dans un bol, ajoutez les fruits et saupoudrez de graines de lin. Ajoutez le miel si désiré."
+                    },
+                    lunch: {
+                        title: "Wrap de légumes et houmous",
+                        ingredients: ["1 tortilla de blé complet", "2 cuillères à soupe de houmous", "Carottes râpées", "Concombre en bâtonnets", "Poivron en lanières", "Quelques feuilles de roquette"],
+                        preparation: "Étalez le houmous sur la tortilla, ajoutez les légumes et la roquette, puis roulez."
+                    },
+                    dinner: {
+                        title: "Tofu sauté aux légumes",
+                        ingredients: ["100g de tofu ferme", "Brocoli", "Carottes", "Poivron", "1 cuillère à café d'huile de sésame", "1 cuillère à soupe de sauce soja à teneur réduite en sel"],
+                        preparation: "Coupez le tofu et les légumes en dés. Faites-les sauter dans une poêle avec l'huile de sésame et la sauce soja."
+                    },
+                    snack: {
+                        title: "Edamame",
+                        ingredients: ["100g d'edamame (fèves de soja)", "Une pincée de sel"],
+                        preparation: "Faites bouillir les edamame pendant 5 minutes, égouttez et saupoudrez d'une pincée de sel."
+                    }
+                },
+                quote: "Votre corps est la maison dans laquelle vous vivrez toute votre vie. Prenez-en soin!",
+                antiSnackingTip: "Identifiez vos déclencheurs émotionnels de grignotage. Tenez un journal pour noter quand vous avez envie de grignoter et comment vous vous sentez à ces moments-là.",
+                exercise: {
+                    title: "Danse cardio",
+                    description: "25 minutes de danse libre sur vos musiques préférées. Amusez-vous tout en brûlant des calories!"
+                },
+                aiSuggestion: "Les applications de réalité virtuelle 2025 offrent maintenant des expériences immersives de méditation guidée pour la gestion de la faim. Ces séances de 5 minutes utilisent des techniques de neuro-feedback pour réduire les envies."
+            },
+            {
+                day: 6,
+                meals: {
+                    breakfast: {
+                        title: "Pancakes à la banane",
+                        ingredients: ["1 banane mûre", "2 œufs", "2 cuillères à soupe de flocons d'avoine", "1/2 cuillère à café de cannelle"],
+                        preparation: "Écrasez la banane, ajoutez les œufs battus, les flocons d'avoine et la cannelle. Cuisez de petites crêpes dans une poêle légèrement huilée."
+                    },
+                    lunch: {
+                        title: "Salade niçoise légère",
+                        ingredients: ["Thon au naturel (100g)", "1 œuf dur", "Haricots verts", "Tomates cerises", "Olives noires (5-6)", "Laitue", "1 cuillère à soupe d'huile d'olive", "Vinaigre balsamique"],
+                        preparation: "Mélangez tous les ingrédients dans un bol. Assaisonnez avec l'huile d'olive et le vinaigre."
+                    },
+                    dinner: {
+                        title: "Poisson blanc aux herbes et purée de chou-fleur",
+                        ingredients: ["Filet de merlu ou lieu (120g)", "1/2 chou-fleur", "1 cuillère à café d'huile d'olive", "Herbes fraîches (aneth, persil)", "Sel et poivre"],
+                        preparation: "Cuisez le chou-fleur à la vapeur puis mixez-le avec un peu d'huile d'olive. Faites cuire le poisson au four avec les herbes pendant 15 minutes à 180°C."
+                    },
+                    snack: {
+                        title: "Compote de pomme maison",
+                        ingredients: ["1 pomme", "Cannelle"],
+                        preparation: "Coupez la pomme en morceaux et faites-la cuire à feu doux avec un peu d'eau et de la cannelle jusqu'à ce qu'elle soit tendre."
+                    }
+                },
+                quote: "Ce n'est pas parce que c'est difficile que nous n'osons pas, c'est parce que nous n'osons pas que c'est difficile.",
+                antiSnackingTip: "Mangez lentement et consciemment. Prenez le temps de savourer chaque bouchée et posez votre fourchette entre les bouchées.",
+                exercise: {
+                    title: "Natation ou aquagym",
+                    description: "30 minutes de natation ou d'aquagym si possible. Sinon, 30 minutes de marche rapide."
+                },
+                aiSuggestion: "Les réfrigérateurs intelligents 2025 peuvent maintenant recommander des recettes basées sur les aliments disponibles et votre plan de repas. Ils peuvent également vous alerter lorsque des aliments sont sur le point de se périmer pour réduire le gaspillage."
+            },
+            {
+                day: 7,
+                meals: {
+                    breakfast: {
+                        title: "Bol de chia au lait d'amande",
+                        ingredients: ["3 cuillères à soupe de graines de chia", "250ml de lait d'amande", "1/2 cuillère à café de vanille", "Fruits frais au choix"],
+                        preparation: "Mélangez les graines de chia, le lait d'amande et la vanille. Laissez reposer au réfrigérateur toute la nuit. Le matin, ajoutez les fruits frais."
+                    },
+                    lunch: {
+                        title: "Salade de quinoa aux légumes grillés",
+                        ingredients: ["1/2 tasse de quinoa cuit", "Courgette grillée", "Poivron grillé", "Oignon rouge", "Feta émiettée (30g)", "1 cuillère à soupe d'huile d'olive", "Jus de citron"],
+                        preparation: "Mélangez le quinoa refroidi avec les légumes grillés coupés en dés et la feta. Assaisonnez avec l'huile d'olive et le jus de citron."
+                    },
+                    dinner: {
+                        title: "Soupe de légumes et toast à l'avocat",
+                        ingredients: ["Soupe de légumes maison ou de qualité (sans crème)", "1 tranche de pain complet", "1/4 d'avocat", "Jus de citron", "Sel et poivre"],
+                        preparation: "Réchauffez la soupe. Écrasez l'avocat sur le pain grillé, ajoutez du jus de citron, du sel et du poivre."
+                    },
+                    snack: {
+                        title: "Bâtonnets de légumes et tzatziki",
+                        ingredients: ["Concombre et carottes en bâtonnets", "2 cuillères à soupe de tzatziki (yaourt grec, concombre râpé, ail, aneth)"],
+                        preparation: "Préparez le tzatziki en mélangeant les ingrédients et servez avec les bâtonnets de légumes."
+                    }
+                },
+                quote: "C'est le jour de repos hebdomadaire! Prenez un moment pour réfléchir à vos progrès et à ce que vous avez appris sur vous-même cette semaine.",
+                antiSnackingTip: "Le jour 7 marque la fin de votre première semaine. Accordez-vous une petite récompense non alimentaire, comme un bain relaxant ou un film que vous vouliez voir.",
+                exercise: {
+                    title: "Journée de récupération active",
+                    description: "Promenade légère de 20-30 minutes et séance d'étirements doux pour récupérer."
+                },
+                aiSuggestion: "Les applications de sommeil 2025 utilisent l'IA pour ajuster automatiquement les lumières, la température et même les sons ambiants de votre chambre pour optimiser votre sommeil. Un bon sommeil est essentiel pour maintenir un poids sain en régulant les hormones de la faim."
+            }
+        ];
+        
+        // Plus de données pour les jours 8-30 seraient ajoutées ici
+        
+        // Fonctions JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const dayCards = document.getElementById('dayCards');
+            const dayNav = document.getElementById('dayNav');
+            const progressBar = document.getElementById('progressBar');
+            const currentDaySpan = document.getElementById('currentDay');
+            const themeToggle = document.getElementById('themeToggle');
+            const successModal = document.getElementById('successModal');
+            const closeModal = document.getElementById('closeModal');
+            const waterGlasses = document.querySelectorAll('.water-glass');
+            
+            let currentDay = 1;
+            let waterCount = 0;
+            
+            // Générer les boutons de navigation des jours
+            for (let i = 1; i <= 30; i++) {
+                const dayButton = document.createElement('button');
+                dayButton.classList.add('day-btn');
+                dayButton.setAttribute('data-day', i);
+                dayButton.textContent = i;
+                
+                if (i === currentDay) {
+                    dayButton.classList.add('active');
+                }
+                
+                dayButton.addEventListener('click', function() {
+                    const day = parseInt(this.getAttribute('data-day'));
+                    showDay(day);
+                });
+                
+                dayNav.appendChild(dayButton);
+            }
+            
+            // Générer les cartes de jours
+            programData.forEach(dayData => {
+                createDayCard(dayData);
+            });
+            
+            // Pour les jours non inclus dans programData (jours 8-30)
+            for (let i = 8; i <= 30; i++) {
+                if (!programData.find(day => day.day === i)) {
+                    createPlaceholderDayCard(i);
+                }
+            }
+            
+            // Fonction pour créer une carte de jour complète
+            function createDayCard(dayData) {
+                const dayCard = document.createElement('div');
+                dayCard.classList.add('day-card');
+                dayCard.setAttribute('data-day', dayData.day);
+                
+                if (dayData.day === currentDay) {
+                    dayCard.classList.add('active');
+                }
+                
+                let mealsHTML = '';
+                for (const [mealType, meal] of Object.entries(dayData.meals)) {
+                    mealsHTML += `
+                    <div class="meal">
+                        <h4>${meal.title}</h4>
+                        <p><strong>Ingrédients:</strong></p>
+                        <ul>
+                            ${meal.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+                        </ul>
+                        <p><strong>Préparation:</strong> ${meal.preparation}</p>
+                    </div>
+                    `;
+                }
+                
+                dayCard.innerHTML = `
+                <div class="day-title">
+                    <h2>Jour ${dayData.day}</h2>
+                    <div class="nav-buttons">
+                        ${dayData.day > 1 ? `<button class="nav-btn prev-day" data-day="${dayData.day - 1}">❮ Jour précédent</button>` : ''}
+                        ${dayData.day < 30 ? `<button class="nav-btn next-day" data-day="${dayData.day + 1}">Jour suivant ❯</button>` : ''}
+                    </div>
+                </div>
+                
+                <div class="motivation-quote">
+                    ${dayData.quote}
+                </div>
+                
+                <h3 class="section-title">Repas du jour</h3>
+                ${mealsHTML}
+                
+                <h3 class="section-title">Astuce anti-grignotage</h3>
+                <div class="tip-box">
+                    ${dayData.antiSnackingTip}
+                </div>
+                
+                <h3 class="section-title">Exercice du jour</h3>
+                <div class="exercise">
+                    <h4>${dayData.exercise.title}</h4>
+                    <p>${dayData.exercise.description}</p>
+                </div>
+                
+                <h3 class="section-title">Innovation 2025</h3>
+                <div class="ai-suggestion">
+                    ${dayData.aiSuggestion}
+                </div>
+                
+                <h3 class="section-title">Liste de courses</h3>
+                <div class="shopping-list">
+                    <p>Voici les ingrédients dont vous aurez besoin pour le jour ${dayData.day}:</p>
+                    <ul>
+                        ${Object.values(dayData.meals).flatMap(meal => meal.ingredients).map(ingredient => `<li>${ingredient}</li>`).join('')}
+                    </ul>
+                </div>
+                `;
+                
+                dayCards.appendChild(dayCard);
+                
+                // Ajouter des écouteurs d'événements pour les boutons de navigation
+                const prevDayBtn = dayCard.querySelector('.prev-day');
+                const nextDayBtn = dayCard.querySelector('.next-day');
+                
+                if (prevDayBtn) {
+                    prevDayBtn.addEventListener('click', function() {
+                        const prevDay = parseInt(this.getAttribute('data-day'));
+                        showDay(prevDay);
+                    });
+                }
+                
+                if (nextDayBtn) {
+                    nextDayBtn.addEventListener('click', function() {
+                        const nextDay = parseInt(this.getAttribute('data-day'));
+                        showDay(nextDay);
+                    });
+                }
+            }
+            
+            // Fonction pour créer une carte de jour placeholder (pour les jours non inclus dans programData)
+            function createPlaceholderDayCard(dayNumber) {
+                const dayCard = document.createElement('div');
+                dayCard.classList.add('day-card');
+                dayCard.setAttribute('data-day', dayNumber);
+                
+                dayCard.innerHTML = `
+                <div class="day-title">
+                    <h2>Jour ${dayNumber}</h2>
+                    <div class="nav-buttons">
+                        <button class="nav-btn prev-day" data-day="${dayNumber - 1}">❮ Jour précédent</button>
+                        ${dayNumber < 30 ? `<button class="nav-btn next-day" data-day="${dayNumber + 1}">Jour suivant ❯</button>` : ''}
+                    </div>
+                </div>
+                
+                <div class="motivation-quote">
+                    Continuez sur votre lancée! Chaque jour vous rapproche de votre objectif.
+                </div>
+                
+                <h3 class="section-title">Contenu à venir</h3>
+                <p>Le programme complet du jour ${dayNumber} sera bientôt disponible. Continuez à suivre les jours précédents en attendant!</p>
+                
+                <div class="tip-box">
+                    <p><strong>Astuce du jour:</strong> N'oubliez pas de boire au moins 2 litres d'eau par jour et de maintenir une activité physique régulière.</p>
+                </div>
+                `;
+                
+                dayCards.appendChild(dayCard);
+                
+                // Ajouter des écouteurs d'événements pour les boutons de navigation
+                const prevDayBtn = dayCard.querySelector('.prev-day');
+                const nextDayBtn = dayCard.querySelector('.next-day');
+                
+                if (prevDayBtn) {
+                    prevDayBtn.addEventListener('click', function() {
+                        const prevDay = parseInt(this.getAttribute('data-day'));
+                        showDay(prevDay);
+                    });
+                }
+                
+                if (nextDayBtn) {
+                    nextDayBtn.addEventListener('click', function() {
+                        const nextDay = parseInt(this.getAttribute('data-day'));
+                        showDay(nextDay);
+                    });
+                }
+            }
+            
+            // Fonction pour afficher un jour spécifique
+            function showDay(day) {
+                // Mettre à jour les boutons
+                document.querySelectorAll('.day-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`.day-btn[data-day="${day}"]`).classList.add('active');
+                
+                // Mettre à jour les cartes
+                document.querySelectorAll('.day-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                document.querySelector(`.day-card[data-day="${day}"]`).classList.add('active');
+                
+                // Mettre à jour la progression
+                currentDay = day;
+                currentDaySpan.textContent = day;
+                progressBar.style.width = `${(day / 30) * 100}%`;
+                
+                // Scroll to top of the card
+                window.scrollTo({
+                    top: document.querySelector('.day-nav').offsetTop - 20,
+                    behavior: 'smooth'
+                });
+                
+                // Sauvegarder le jour actuel
+                localStorage.setItem('currentDay', day);
+                
+                // Afficher la modal de succès si c'est le dernier jour
+                if (day === 30) {
+                    setTimeout(() => {
+                        successModal.style.display = 'flex';
+                    }, 1000);
+                }
+            }
+            
+            // Suivi d'hydratation
+            waterGlasses.forEach(glass => {
+                glass.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    
+                    // Reset all glasses up to the clicked one
+                    waterGlasses.forEach(g => {
+                        const gIndex = parseInt(g.getAttribute('data-index'));
+                        if (gIndex <= index) {
+                            g.classList.add('filled');
+                        } else {
+                            g.classList.remove('filled');
+                        }
+                    });
+                    
+                    waterCount = index;
+                    
+                    // Save to localStorage
+                    localStorage.setItem('waterCount', waterCount);
+                });
+            });
+            
+            // Toggle du thème
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                
+                if (document.body.classList.contains('dark-theme')) {
+                    themeToggle.textContent = '☀️';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    themeToggle.textContent = '🌙';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Fermer la modal de succès
+            closeModal.addEventListener('click', function() {
+                successModal.style.display = 'none';
+            });
+            
+            // Charger les préférences sauvegardées
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeToggle.textContent = '☀️';
+            }
+            
+            // Charger le compteur d'eau sauvegardé
+            const savedWaterCount = localStorage.getItem('waterCount');
+            if (savedWaterCount) {
+                waterCount = parseInt(savedWaterCount);
+                for (let i = 0; i < waterCount; i++) {
+                    waterGlasses[i].classList.add('filled');
+                }
+            }
+            
+            // Charger le jour sauvegardé ou utiliser le jour actuel
+            const savedDay = localStorage.getItem('currentDay');
+            if (savedDay) {
+                showDay(parseInt(savedDay));
+            } else {
+                showDay(1);
+            }
+            
+            // Ajout d'une fonctionnalité pour exporter le plan en PDF
+            const addExportButton = () => {
+                const container = document.querySelector('.container');
+                const exportButton = document.createElement('button');
+                exportButton.textContent = 'Télécharger en PDF';
+                exportButton.style.backgroundColor = '#4CAF50';
+                exportButton.style.color = 'white';
+                exportButton.style.border = 'none';
+                exportButton.style.padding = '10px 20px';
+                exportButton.style.borderRadius = '30px';
+                exportButton.style.margin = '20px auto';
+                exportButton.style.display = 'block';
+                exportButton.style.cursor = 'pointer';
+                exportButton.style.fontWeight = 'bold';
+                
+                exportButton.addEventListener('click', () => {
+                    window.print();
+                });
+                
+                container.insertBefore(exportButton, document.querySelector('.day-nav'));
+            };
+            
+            addExportButton();
+            
+            // Easter egg: double-click sur le titre
+            document.querySelector('h1').addEventListener('dblclick', function() {
+                const colors = ['#4CAF50', '#2196F3', '#9C27B0', '#FF5722', '#FFEB3B'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                document.documentElement.style.setProperty('--primary-color', randomColor);
+            });
+        });
+    </script>
+</body>
+</html>
